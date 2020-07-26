@@ -1,24 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios'
 import './App.css';
+import HomePage from './HomePage'
 
 function App() {
+
+  const [users, setUsers] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
+useEffect(() => {
+  axios.get('https://insta.nextacademy.com/api/v1/users')
+  .then(result => {
+    // console.log(result)
+    setUsers(result.data)
+    setIsLoading(false)
+    
+  })
+  .catch(error => {
+    console.log(error)
+  })
+}, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <HomePage users={users} isLoading={isLoading} />
     </div>
   );
 }

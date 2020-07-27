@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import './App.css';
-import HomePage from './HomePage'
+import HomePage from './pages/HomePage'
+import { Route, Link } from "react-router-dom"
+import UserProfilePage from './pages/UserProfilePage'
+import Navbar from './components/Navbar'
 
 function App() {
 
@@ -23,7 +26,9 @@ useEffect(() => {
 
   return (
     <div>
-      <HomePage users={users} isLoading={isLoading} />
+      <Navbar />
+      <Route exact path="/" render={(props) => <HomePage {...props} users={users} isLoading={isLoading}/>}/>
+      <Route path="/users/:id" render={(props) => <UserProfilePage {...props} users={users} />} />
     </div>
   );
 }

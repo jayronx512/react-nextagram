@@ -1,6 +1,6 @@
 import React from 'react'
-import './App.css';
-import UserImages from './UserImages'
+import '../App.css';
+import UserImages from '../containers/UserImages'
 
 function HomePage(props) {
     return (

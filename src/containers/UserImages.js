@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import Image, {onLoadCallback, onErrorCallback} from 'react-graceful-image'
+import Loader from '../components/Loader'
 
 function UserImages(props) {
 
@@ -21,11 +23,18 @@ function UserImages(props) {
       }, [])
     return (
         <div>
-            {isLoading ? <div class="loadingio-spinner-spin-t2vmr6gsep"><div class="ldio-jgh4cv9kzy">
-                <div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div><div><div></div></div>
-                </div></div> : null}
+            {isLoading ? <Loader width="100px" height="100px" color="black"/> : null}
             {userImages.map(userImage => (
-                <img style={{width:"20px"}} src={userImage} />
+                <Image
+                    src={userImage}
+                    width='250'
+                    height='250'
+                    style={{ padding: '20px' }}
+                    alt='My awesome image'
+                    retry={{ count: 10, delay: 2 }}
+                    onLoad={ onLoadCallback }
+                    onError={ onErrorCallback }
+                />
             ))}
         </div>
     )

@@ -13,7 +13,6 @@ function UserImages(props) {
         .then(result => {
           // console.log(result)
           setIsLoading(false)
-          console.log(result.data)
           setUserImages(result.data)
           
         })

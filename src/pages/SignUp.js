@@ -3,6 +3,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import '../App.css'
 import axios from 'axios'
+import { toast } from 'react-toastify';
+import { Form, FormGroup, Label, Input, FormFeedback, FormText } from 'reactstrap'
+
 
 function getModalStyle() {
   const top = 50 
@@ -80,6 +83,20 @@ function SignUp() {
           }
       })
       .then(response => {
+        setData({
+            username: "",
+            password: "",
+            confirmPassword: "",
+            email: ""
+        })
+        toast.success("Signed up successfully!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+          });
           console.log(response)
       })
       .catch(error => {
@@ -87,6 +104,66 @@ function SignUp() {
       })
   }
 
+    const [delay, setDelay] = useState(null)
+    const [usernameValid, setUsernameValid] = useState(true)
+    const [username, setUsername] = useState("")
+
+    const checkUsername = newUsername => {
+        axios.get(
+            `https://insta.nextacademy.com/api/v1/users/check_name?username=${newUsername}`
+        )
+        .then(response=> {
+            console.log(response.data)
+            if (response.data.valid) {
+                setUsernameValid(true);
+            } else {
+                setUsernameValid(false);
+            }
+        })
+    }
+
+    const handleUsernameInput = e => {
+        clearTimeout(delay);
+        const newUsername = e.target.value;
+        setUsername(newUsername)
+        const newDelay = setTimeout(() => {
+            checkUsername(newUsername);
+        }, 500);
+
+        setDelay(newDelay)
+    }
+
+    const getInputProp = () => {
+        if (!username.length) {
+          return null;
+        }
+    
+        if (username.length <= 6) {
+          return { invalid: true };
+        }
+    
+        if (usernameValid) {
+          return { valid: true };
+        } else {
+          return { invalid: true };
+        }
+      };
+    
+      const getFormFeedback = () => {
+        if (!username.length) {
+          return null;
+        }
+    
+        if (username.length <= 6) {
+          return <FormFeedback invalid>Must be at least 6 characters</FormFeedback>;
+        }
+    
+        if (usernameValid) {
+          return <FormFeedback valid>Sweet! That name is available</FormFeedback>;
+        } else {
+          return <FormFeedback invalid>Sorry! Username is taken</FormFeedback>;
+        }
+      };
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
@@ -104,6 +181,18 @@ function SignUp() {
             <input onChange={handleInput} className="signup-style" name= "email" type="text" placeholder="Email" value={data.email}/>
             {emptyField ? <input className="submit-style" disabled="disabled" type="submit"/> : <input className="submit-style" type="submit"/>}
         </form>
+
+        <FormGroup>
+            <Label for="username">Username</Label>
+            <Input
+                type="text"
+                value={username}
+                onChange={handleUsernameInput}
+                {...getInputProp()}
+            />
+            {getFormFeedback()}
+            <FormText>Enter a username between 6 and 20 characters</FormText>
+        </FormGroup>
     </div>
   );
 

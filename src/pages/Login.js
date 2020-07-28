@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import '../App.css'
 
+import { toast } from 'react-toastify';
+
 function getModalStyle() {
   const top = 50 
   const left = 50 
@@ -59,7 +61,15 @@ function Login() {
 }
 
 const handleSubmit = e => {
-    e.preventDefault() 
+    e.preventDefault()
+    toast.success("Logged in successfully!", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
     console.log(loginData.username)
     console.log(loginData.password)
     setOpen(false)

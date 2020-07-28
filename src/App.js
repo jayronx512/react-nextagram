@@ -5,6 +5,7 @@ import HomePage from './pages/HomePage'
 import { Route, Link } from "react-router-dom"
 import UserProfilePage from './pages/UserProfilePage'
 import Navbar from './components/Navbar'
+import { ToastContainer } from 'react-toastify'
 
 
 function App() {
@@ -27,6 +28,7 @@ useEffect(() => {
 
   return (
     <div>
+      <ToastContainer />
       <Navbar />
       <Route exact path="/" render={(props) => <HomePage {...props} users={users} isLoading={isLoading}/>}/>
       <Route path="/users/:id" render={(props) => <UserProfilePage {...props} users={users} />} />
